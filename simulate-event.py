@@ -78,18 +78,21 @@ def execution(i):
         with open(os.getcwd() + "/input_file/"+str(index+1)+"/demographic.json", 'w') as outfile:
             json.dump(demographic_json, outfile)
 
-
+        idx = raw_data_call.index[raw_data_call['user_id'] == index+1]
         call_log_data = raw_data_call.loc[raw_data_call['user_id'] == index+1]
-
+        print call_log_data
 
         call_log_array = []
 
         if(len(call_log_data) > 0) :
             for quantity in range (len(call_log_data)) :
-                call_log_sub_array = {}
-                for title in list(call_log_data):
-                    call_log_sub_array[title] = "aaaa"
-                    print str(title) +" = "+ str(call_log_data[title][0])
+                #print quantity
+                #print call_log_data['date'][idx[quantity]]
+                call_log_sub_array = {
+                    "date"      : call_log_data['date'][idx[quantity]],
+                    "duration"  : "ddd",
+                    "category"  : "aaa"
+                }
                 call_log_array.append(call_log_sub_array)
 
         call_log_json = {
@@ -141,7 +144,22 @@ if (interval < 1 or batch < 1):
 
 create_parent_path()
 execution_data()
+# idx = raw_data_call.index[raw_data_call['user_id'] == 2]
+# print idx
+#
+# test = raw_data_call.loc[idx]
+# print test
+#
+#
+# test2 = raw_data_call.loc[raw_data_call['user_id'] == 2]
+# print test2
+#
+# for quantity in range(len(test2)):
+#     print quantity
+#     print test2['date'][idx[quantity]]
 
+#print test
+#print test['date'][0]
 
 
 
