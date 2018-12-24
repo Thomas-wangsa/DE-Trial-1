@@ -4,7 +4,7 @@ from datetime import datetime
 import json
 import os
 import sys, getopt
-
+import numpy as np
 import collections
 
 interval = 0
@@ -88,18 +88,18 @@ def execution(i):
             for quantity in range (len(call_log_data)) :
                 #print quantity
                 #print call_log_data['date'][idx[quantity]]
-                if(call_log_data['date'][idx[quantity]] is None) :
+                if( pd.isnull(call_log_data['date'][idx[quantity]]) ) :
                     convert_date = None
                 else :
                     ts = int(call_log_data['date'][idx[quantity]])
                     convert_date = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
-                if(call_log_data['duration'][idx[quantity]] is None) :
-                    duration_result = "-"
+                if( pd.isnull(call_log_data['duration'][idx[quantity]]) ) :
+                    duration_result = None
                 else :
                     duration_result = int(call_log_data['duration'][idx[quantity]])
 
-                if (call_log_data['type_cat'][idx[quantity]] is None):
+                if ( pd.isnull(call_log_data['type_cat'][idx[quantity]]) ):
                     category_result = None
                 else :
                     category_raw = int(call_log_data['type_cat'][idx[quantity]])
