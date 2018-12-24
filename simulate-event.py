@@ -88,10 +88,38 @@ def execution(i):
             for quantity in range (len(call_log_data)) :
                 #print quantity
                 #print call_log_data['date'][idx[quantity]]
+                if(call_log_data['date'][idx[quantity]] is None) :
+                    convert_date = None
+                else :
+                    ts = int(call_log_data['date'][idx[quantity]])
+                    convert_date = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+
+                if(call_log_data['duration'][idx[quantity]] is None) :
+                    duration_result = "-"
+                else :
+                    duration_result = int(call_log_data['duration'][idx[quantity]])
+
+                if (call_log_data['type_cat'][idx[quantity]] is None):
+                    category_result = None
+                else :
+                    category_raw = int(call_log_data['type_cat'][idx[quantity]])
+                    category_result = "undefined"
+
+                    if(category_raw == 1) :
+                        category_result = "incoming"
+                    elif(category_raw == 2) :
+                        category_result = "missed call"
+                    elif(category_raw == 3) :
+                        category_result = "outgoint"
+                    elif(category_raw == 4) :
+                        category_result = "unknown"
+                    elif(category_raw == 5) :
+                        category_result = "voicemail"
+
                 call_log_sub_array = {
-                    "date"      : call_log_data['date'][idx[quantity]],
-                    "duration"  : "ddd",
-                    "category"  : "aaa"
+                    "date"      : convert_date,
+                    "duration"  : duration_result,
+                    "category"  : category_result
                 }
                 call_log_array.append(call_log_sub_array)
 
