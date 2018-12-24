@@ -1,13 +1,9 @@
 #!/usr/bin/python
-import pandas as pd
 import time
 from datetime import datetime
 import json
 import os
 import sys, getopt
-from os import listdir
-from os.path import isfile, join
-
 import MySQLdb
 
 db = MySQLdb.connect(host="localhost",    # your host, usually localhost
@@ -47,18 +43,20 @@ cur.execute("CREATE TABLE IF NOT EXISTS `input_data` (`id` int NOT NULL AUTO_INC
 
 mypath = os.getcwd() + "/input_file/"
 list_dir = os.listdir(mypath)
+list_dir = [int(x) for x in list_dir]
+list_dir.sort()
 
 print datetime.today()
 for index_dir in range (len(list_dir)) :
-
     user_dir = list_dir[index_dir]
     querystr = "SELECT * FROM input_data WHERE user_id = "+str(list_dir[index_dir])
     queryresult = cur.execute(querystr)
 
     if(queryresult > 0) :
-        print user_dir+" already exist in table"
+        print "user_id =" + user_dir+" already exist in table"
         continue
     else :
+        print "user_id = " + user_dir + " on process "
         file_object_demographic = open(mypath+str(list_dir[index_dir])+"/demographic.json", "r")
         demographic_json = json.loads(file_object_demographic.read())
 
@@ -71,6 +69,7 @@ for index_dir in range (len(list_dir)) :
         incoming_duration   = None
         num_missed_call     = None
         num_unknown_call    = None
+
         for key,value_str in demographic_json.items():
             if(key == "data") :
                 data_json = json.loads(value_str)
@@ -98,7 +97,24 @@ for index_dir in range (len(list_dir)) :
                         elif(v >= 25000000) :
                             group_of_salary = 4
 
+        for key, json_array in call_log_json.items():
+            if(key == "data") :
+                outgoing_duration   = 0
+                incoming_duration   = 0
+                num_missed_call     = 0
+                num_unknown_call    = 0
 
+                for item in json_array :
+                    #print item
+
+                    if(item['category'] == "outgoing") :
+                        outgoing_duration += item['duration']
+                    if (item['category'] == "incoming"):
+                        incoming_duration += item['duration']
+                    if(item['category'] == "missed call") :
+                        num_missed_call += 1
+                    if (item['category'] == "unknown"):
+                        num_unknown_call += 1
 
         sql  = "INSERT INTO input_data "
         sql += "(user_id, group_age,group_salary,outgoing_duration,incoming_duration,num_missed_call,num_unknown_call) "
@@ -106,8 +122,5 @@ for index_dir in range (len(list_dir)) :
                str(outgoing_duration)+","+str(incoming_duration)+","+str(num_missed_call)+","+str(num_unknown_call)+")"
         cur.execute(sql)
         db.commit()
-
-    #print queryresult
-    #print list_dir[index_dir]
-    #time.sleep(interval * 60)
-    #print datetime.today()
+    time.sleep(interval)
+    print datetime.today()

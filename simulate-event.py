@@ -110,7 +110,7 @@ def execution(i):
                     elif(category_raw == 2) :
                         category_result = "missed call"
                     elif(category_raw == 3) :
-                        category_result = "outgoint"
+                        category_result = "outgoing"
                     elif(category_raw == 4) :
                         category_result = "unknown"
                     elif(category_raw == 5) :
