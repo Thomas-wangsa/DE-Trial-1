@@ -192,9 +192,14 @@ def execution_data() :
         iterate += 1
     i = 0
     for x in range(iterate):
+        start_time = datetime.today()
+        print start_time
         execution(i)
-        print datetime.today()
-        time.sleep(interval)
+        diff = interval - (datetime.today() - start_time).total_seconds()
+        if(diff < 0) :
+            diff = 0
+        time.sleep(diff)
+
         i += batch
 
 execution_data()

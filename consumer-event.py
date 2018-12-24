@@ -192,13 +192,17 @@ def extract_data() :
     print datetime.today()
     for index_dir in range(len(list_dir)):
         user_dir = list_dir[index_dir]
-
+        start_time = datetime.today()
+        print start_time
         if(check_user_exist(user_dir)) :
             continue
         else :
             execution(user_dir)
-        time.sleep(interval)
-        print datetime.today()
+        #time.sleep(interval)
+        diff = interval - (datetime.today() - start_time).total_seconds()
+        if (diff < 0):
+            diff = 0
+        time.sleep(diff)
 
 
 extract_data()
