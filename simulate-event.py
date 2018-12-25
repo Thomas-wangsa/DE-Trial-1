@@ -70,6 +70,8 @@ def create_parent_path() :
             print ("Creation of the directory %s failed" % parent_path)
             print OSError
             exit(1)
+    else :
+        print ("path already exist %s " % path)
 
 def myconverter(o):
     if isinstance(o, datetime):
@@ -86,6 +88,8 @@ def create_user_path(user_path) :
             print ("Creation of the directory %s failed" % path)
             print OSError
             exit(1)
+    else :
+        print ("path already exist %s " % path)
 
 raw_data_call   = append_raw_data_call()
 demographic     = read_demographic_data()
